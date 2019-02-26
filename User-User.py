@@ -11,23 +11,14 @@ Movies=pd.read_csv("~/WSU_SPRING_2019/DATA_MINING/hw2/Recommender-Systems/movies
 Tags=pd.read_csv("~/WSU_SPRING_2019/DATA_MINING/hw2/Recommender-Systems/tags.csv",encoding="ISO-8859-1")
 
 
-
+''' Calculating the mean rating and subtracting from each rating of a user to calculate the adjusted rating. '''
 #%%
 Mean= Ratings.groupby(['userId'], as_index = False, sort = False).mean().rename(columns = {'rating': 'rating_mean'})[['userId','rating_mean']]
 Ratings = pd.merge(Ratings,Mean,on = 'userId', how = 'left', sort = False)
 Ratings['rating_adjusted']=Ratings['rating']-Ratings['rating_mean']
 Ratings
 
-
-#%%
-[i for i,x in enumerate(distinct_movie) if x == 4878]
-
-
-#%%
-userID = 1203
-distinct_movie.tolist().index(userID)
-
-
+''' Finding the top 30 similar user profiles for each user. '''
 #%%
 distinct_users=np.unique(Ratings['userId'])
 
@@ -85,11 +76,9 @@ for movie in distinct_movie[91:92]:
     user_data_all['movieId']=movie
     user_data_append = user_data_append.append(user_data_all, ignore_index=True)
     i=i+1
-    
 
-
+''' Calculating the predicted rating for each item and ignoring the item if less than 2 similar neighbours. '''
 #%%
-
 User_dot_adj_rating_all=pd.DataFrame()
 
 distinct_movies=np.unique(Ratings['movieId'])
@@ -122,12 +111,11 @@ for movie in distinct_movies[91:92]:
         
 User_dot_adj_rating_all = User_dot_adj_rating_all.sort_values(['Rating'], ascending=False)
 
-
+#%%
+userID = 1203
+distinct_movie.tolist().index(userID)
 #%%
 User_dot_adj_rating_all
 
-
 #%%
-
-
-
+[i for i,x in enumerate(distinct_movie) if x == 4878]
